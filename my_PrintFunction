@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdarg.h> //for variadic functions
+
+void my_printf(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    
+    for (const char *p = format; *p != '\0'; p++) {
+        if (*p == '%') {
+            p++;
+            
+            // Handle format specifier
+            switch (*p) {
+                case 'd': {
+                    int i = va_arg(args, int);
+                    printf("%d", i);
+                    break;
+                }
+                case 'f': {
+                    double f = va_arg(args, double);
+                    printf("%f", f); // Print float
+                    break;
+                }
+                case 'c': {
+                    int c = va_arg(args, int); // char is promoted to int in variadic functions
+                    putchar(c); // Print character
+                    break;
+                }
+                case 's': {
+                    char *s = va_arg(args, char *);
+                    printf("%s", s); // Print string
+                    break;
+                }
+                default:
+                    putchar('%'); // Print '%' if unknown specifier
+                    putchar(*p);  // Print the unknown specifier character
+                    break;
+            }
+        } else {
+            putchar(*p); // Print normal characters
+        }
+    }
+    
+    va_end(args);
+}
+
+int main() {
+    // variables
+    int age = 25;
+    float height = 5.9;
+    char initial = 'A';
+    char name[] = "John";
+
+    // function call section
+    my_printf("Name: %s\n", name);
+    my_printf("Initial: %c\n", initial);
+    my_printf("Age: %d\n", age);
+    my_printf("Height: %f\n", height);
+    
+    return 0;
+}
